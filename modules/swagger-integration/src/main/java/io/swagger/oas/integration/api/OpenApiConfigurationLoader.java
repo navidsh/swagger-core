@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import io.swagger.oas.integration.OpenAPIConfiguration;
+
 public interface OpenApiConfigurationLoader {
 
     OpenAPIConfiguration load(String path) throws IOException;

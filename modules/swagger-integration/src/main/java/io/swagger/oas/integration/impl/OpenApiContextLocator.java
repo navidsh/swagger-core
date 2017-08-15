@@ -1,4 +1,4 @@
-package io.swagger.oas.integration;
+package io.swagger.oas.integration.impl;
 
 import io.swagger.oas.integration.api.OpenApiContext;
 

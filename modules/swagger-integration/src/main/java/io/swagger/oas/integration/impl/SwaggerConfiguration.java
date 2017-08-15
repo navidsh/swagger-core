@@ -1,7 +1,7 @@
-package io.swagger.oas.integration;
+package io.swagger.oas.integration.impl;
 
+import io.swagger.oas.integration.OpenAPIConfiguration;
 import io.swagger.oas.models.OpenAPI;
-import io.swagger.oas.integration.api.OpenAPIConfiguration;
 
 import java.util.Collection;
 import java.util.Map;

@@ -1,6 +1,6 @@
 package io.swagger.oas.integration.api;
 
-import io.swagger.oas.integration.OpenApiConfigurationException;
+import io.swagger.oas.integration.impl.OpenApiConfigurationException;
 
 public interface OpenApiContextBuilder {
 
