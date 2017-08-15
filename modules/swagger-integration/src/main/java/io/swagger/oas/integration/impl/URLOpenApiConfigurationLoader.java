@@ -1,7 +1,7 @@
 package io.swagger.oas.integration.impl;
 
 import io.swagger.oas.integration.OpenAPIConfiguration;
-import io.swagger.oas.integration.api.OpenApiConfigurationLoader;
+import io.swagger.oas.integration.ext.OpenApiConfigurationLoader;
 
 import java.io.IOException;
 

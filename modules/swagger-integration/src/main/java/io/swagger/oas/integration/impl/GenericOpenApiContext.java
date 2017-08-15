@@ -3,8 +3,8 @@ package io.swagger.oas.integration.impl;
 import io.swagger.oas.integration.OpenAPIConfiguration;
 import io.swagger.oas.integration.OpenAPIReader;
 import io.swagger.oas.integration.OpenAPIScanner;
-import io.swagger.oas.integration.api.OpenApiConfigurationLoader;
-import io.swagger.oas.integration.api.OpenApiContext;
+import io.swagger.oas.integration.ext.OpenApiConfigurationLoader;
+import io.swagger.oas.integration.ext.OpenApiContext;
 import io.swagger.oas.models.OpenAPI;
 
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +39,8 @@ public class GenericOpenApiContext<T extends GenericOpenApiContext> implements O
     // 0 doesn't cache
     // -1 perpetual
     private long cacheTTL = -1;
+
+    public static final String OPENAPI_CONFIGURATION_CACHE_TTL_KEY = "openApi.configuration.cacheTTL";
 
     public long getCacheTTL() {
         return cacheTTL;
@@ -278,10 +280,23 @@ public class GenericOpenApiContext<T extends GenericOpenApiContext> implements O
             throw new OpenApiConfigurationException("error initializing context: " + e.getMessage(), e);
         }
 
-        // set cache TTL if present in configuration
-        if (openApiConfiguration.getCacheTTL() != null) {
-            this.cacheTTL = openApiConfiguration.getCacheTTL();
-        }
+		// set cache TTL if present in configuration
+		if (openApiConfiguration.getUserDefinedOptions() != null) {
+			Object cacheTTLObj = openApiConfiguration.getUserDefinedOptions().get(OPENAPI_CONFIGURATION_CACHE_TTL_KEY);
+			if (cacheTTLObj != null) {
+				if (cacheTTLObj instanceof Long) {
+					this.cacheTTL = (long) cacheTTLObj;
+				} else if (cacheTTLObj instanceof Integer) {
+					this.cacheTTL = ((Integer) cacheTTLObj).longValue();
+				} else if (cacheTTLObj instanceof String) {
+					try {
+						this.cacheTTL = Long.parseLong((String) cacheTTLObj);
+					} catch (NumberFormatException e) {
+						LOGGER.error("error reading 'cacheTTL' configuration: " + e.getMessage(), e);
+					}
+				}
+			}
+		}
         register();
         return (T) this;
     }
@@ -321,14 +336,8 @@ public class GenericOpenApiContext<T extends GenericOpenApiContext> implements O
         if (merged.getScannerClass() == null) {
             merged.setScannerClass(parentConfig.getScannerClass());
         }
-        if (merged.getCacheTTL() == null) {
-            merged.setCacheTTL(parentConfig.getCacheTTL());
-        }
         if (merged.getUserDefinedOptions() == null) {
             merged.setUserDefinedOptions(parentConfig.getUserDefinedOptions());
-        }
-        if (merged.isPrettyPrint() == null) {
-            merged.setPrettyPrint(parentConfig.isPrettyPrint());
         }
         if (merged.isReadAllResources() == null) {
             merged.setReadAllResources(parentConfig.isReadAllResources());

@@ -2,7 +2,7 @@ package io.swagger.oas.integration.impl;
 
 import io.swagger.oas.integration.OpenAPIConfigBuilder;
 import io.swagger.oas.integration.OpenAPIConfiguration;
-import io.swagger.oas.integration.api.OpenApiConfigurationLoader;
+import io.swagger.oas.integration.ext.OpenApiConfigurationLoader;
 
 import java.io.IOException;
 import java.util.ServiceLoader;
@@ -15,7 +15,7 @@ public class ServiceOpenApiConfigurationLoader implements OpenApiConfigurationLo
 
         ServiceLoader<OpenAPIConfigBuilder> loader = ServiceLoader.load(OpenAPIConfigBuilder.class);
         if (loader.iterator().hasNext()) {
-            return loader.iterator().next().build();
+            return loader.iterator().next().build(null);
         }
         throw new IOException("Error loading OpenAPIConfigBuilder service implementation.");
     }

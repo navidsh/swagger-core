@@ -19,23 +19,8 @@ public class SwaggerConfiguration implements OpenAPIConfiguration {
     private String readerClass;
     private String scannerClass;
 
-    private Boolean prettyPrint;
     private Boolean readAllResources;
     private Collection<String> ignoredRoutes;
-    private Long cacheTTL = -1L;
-
-    public Long getCacheTTL() {
-        return cacheTTL;
-    }
-
-    public void setCacheTTL(Long cacheTTL) {
-        this.cacheTTL = cacheTTL;
-    }
-
-    public SwaggerConfiguration cacheTTL(Long cacheTTL) {
-        this.cacheTTL = cacheTTL;
-        return this;
-    }
 
     public Boolean isReadAllResources() {
         return readAllResources;
@@ -60,19 +45,6 @@ public class SwaggerConfiguration implements OpenAPIConfiguration {
 
     public SwaggerConfiguration ignoredRoutes(Collection<String> ignoredRoutes) {
         this.ignoredRoutes = ignoredRoutes;
-        return this;
-    }
-
-    public Boolean isPrettyPrint() {
-        return prettyPrint;
-    }
-
-    public void setPrettyPrint(Boolean prettyPrint) {
-        this.prettyPrint = prettyPrint;
-    }
-
-    public SwaggerConfiguration prettyPrint(Boolean prettyPrint) {
-        this.prettyPrint = prettyPrint;
         return this;
     }
 

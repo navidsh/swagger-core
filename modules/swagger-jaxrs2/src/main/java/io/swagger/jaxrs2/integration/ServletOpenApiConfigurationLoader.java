@@ -2,7 +2,7 @@ package io.swagger.jaxrs2.integration;
 
 import io.swagger.oas.integration.OpenAPIConfigBuilder;
 import io.swagger.oas.integration.OpenAPIConfiguration;
-import io.swagger.oas.integration.api.OpenApiConfigurationLoader;
+import io.swagger.oas.integration.ext.OpenApiConfigurationLoader;
 import io.swagger.oas.integration.impl.ClasspathOpenApiConfigurationLoader;
 import io.swagger.oas.integration.impl.FileOpenApiConfigurationLoader;
 import io.swagger.oas.integration.impl.SwaggerConfiguration;
@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletConfig;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static io.swagger.jaxrs2.integration.ServletConfigContextUtils.OPENAPI_CONFIGURATION_CACHE_TTL_KEY;
 import static io.swagger.jaxrs2.integration.ServletConfigContextUtils.OPENAPI_CONFIGURATION_FILTER_KEY;
@@ -46,15 +48,21 @@ public class ServletOpenApiConfigurationLoader implements OpenApiConfigurationLo
             return null;
         }
         if (StringUtils.isBlank(path)) { // we want to resolve from servlet params
-            SwaggerConfiguration configuration = new SwaggerConfiguration()
-                    .resourcePackages(resolveResourcePackages(servletConfig))
-                    .filterClass(getInitParam(servletConfig, OPENAPI_CONFIGURATION_FILTER_KEY))
-                    .resourceClasses(resolveResourceClasses(servletConfig))
-                    .readAllResources(getBooleanInitParam(servletConfig, OPENAPI_CONFIGURATION_READALLRESOURCES_KEY))
-                    .prettyPrint(getBooleanInitParam(servletConfig, OPENAPI_CONFIGURATION_PRETTYPRINT_KEY))
-                    .readerClass(getInitParam(servletConfig, OPENAPI_CONFIGURATION_READER_KEY))
-                    .cacheTTL(getLongInitParam(servletConfig, OPENAPI_CONFIGURATION_CACHE_TTL_KEY))
-                    .scannerClass(getInitParam(servletConfig, OPENAPI_CONFIGURATION_SCANNER_KEY));
+			SwaggerConfiguration configuration = new SwaggerConfiguration()
+					.resourcePackages(resolveResourcePackages(servletConfig))
+					.filterClass(getInitParam(servletConfig, OPENAPI_CONFIGURATION_FILTER_KEY))
+					.resourceClasses(resolveResourceClasses(servletConfig))
+					.readAllResources(getBooleanInitParam(servletConfig, OPENAPI_CONFIGURATION_READALLRESOURCES_KEY))
+					.readerClass(getInitParam(servletConfig, OPENAPI_CONFIGURATION_READER_KEY))
+					.scannerClass(getInitParam(servletConfig, OPENAPI_CONFIGURATION_SCANNER_KEY))
+					.userDefinedOptions(new HashMap<String, Object>() {
+						{
+							put(OPENAPI_CONFIGURATION_PRETTYPRINT_KEY,
+									getBooleanInitParam(servletConfig, OPENAPI_CONFIGURATION_PRETTYPRINT_KEY));
+							put(OPENAPI_CONFIGURATION_CACHE_TTL_KEY,
+									getLongInitParam(servletConfig, OPENAPI_CONFIGURATION_CACHE_TTL_KEY));
+						}
+					});
 
             return configuration;
 
@@ -75,7 +83,7 @@ public class ServletOpenApiConfigurationLoader implements OpenApiConfigurationLo
                 Class cls = getClass().getClassLoader().loadClass(builderClassName);
                 // TODO instantiate with configuration
                 OpenAPIConfigBuilder builder = (OpenAPIConfigBuilder) cls.newInstance();
-                return builder.build();
+                return builder.build(null);
             } catch (Exception e) {
                 LOGGER.error("error loading builder: " + e.getMessage(), e);
             }

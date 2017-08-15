@@ -1,4 +1,4 @@
-package io.swagger.oas.integration.api;
+package io.swagger.oas.integration.ext;
 
 import java.io.BufferedReader;
 import java.io.IOException;

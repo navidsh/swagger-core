@@ -4,7 +4,7 @@ import io.swagger.jaxrs2.Reader;
 import io.swagger.oas.integration.OpenAPIConfiguration;
 import io.swagger.oas.integration.OpenAPIReader;
 import io.swagger.oas.integration.OpenAPIScanner;
-import io.swagger.oas.integration.api.OpenApiContext;
+import io.swagger.oas.integration.ext.OpenApiContext;
 import io.swagger.oas.integration.impl.GenericOpenApiContext;
 
 import org.apache.commons.lang3.StringUtils;

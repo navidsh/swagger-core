@@ -1,6 +1,6 @@
 package io.swagger.oas.integration;
 
-import io.swagger.oas.integration.api.OpenApiContext;
+import io.swagger.oas.integration.ext.OpenApiContext;
 import io.swagger.oas.integration.impl.GenericOpenApiContext;
 import io.swagger.oas.integration.impl.SwaggerConfiguration;
 import io.swagger.oas.models.OpenAPI;

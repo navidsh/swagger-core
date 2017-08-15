@@ -24,8 +24,4 @@ public interface OpenAPIConfiguration {
     Map<String, Object> getUserDefinedOptions();
 
     Boolean isReadAllResources();
-
-    Boolean isPrettyPrint();
-
-    Long getCacheTTL();
 }
